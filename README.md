@@ -1,5 +1,28 @@
 # BirdCLEF Autonomous Meta-Agent
 
+> **Academic group project** · Advanced Predictive Analytics, M.Sc. Business Analytics, Católica Lisbon School of Business & Economics · Spring 2026  
+> Team: Enrico Zafiris, Lasse Aaron Ortmann, Moritz Üblacker, Alexander Wanstrath  
+> Original repository: [enricozafcode/APA-MUE-LO-AW-EZ](https://github.com/enricozafcode/APA-MUE-LO-AW-EZ)
+
+## Project overview
+An autonomous research agent that designs, trains, evaluates and iterates on deep learning models for the [BirdCLEF 2026](https://www.kaggle.com/competitions/birdclef-2026) Kaggle competition: multi-label classification of 234 bird species in 5-second clips from passive soundscape recordings of the Pantanal wetlands.
+
+A locally hosted LLM drives a four-role loop (Researcher, Coder, Executor, Evaluator) with an append-only experiment memory. Two tracks compete in a cheap tournament on about 1,500 samples: a CNN trained from scratch on mel-spectrograms and a trainable head on frozen Google Perch embeddings. Only the winner is retrained on the full data and fine-tuned with pseudo-labelled soundscapes.
+
+**Results**
+- Kaggle public leaderboard score improved from about 0.65 (CNN baseline) to **0.88** macro ROC-AUC across 22 submission versions and more than 215 tracked agent iterations
+- Pretrained acoustic encoders were the main performance driver: Perch (0.88) clearly outperformed BirdNET (0.70) and the CNN from scratch (0.72 with augmentation)
+- Local macro ROC-AUC misranked models relative to the leaderboard, so the agent optimises macro average precision on labelled soundscapes instead
+- Blending Perch zero-shot predictions with the trained head acts as an implicit ensemble that helps with rare species
+
+**Tools:** Python · TensorFlow/Keras · ONNX Runtime · librosa · Ollama (qwen2.5-coder) · Kaggle
+
+📄 [Project report (PDF)](docs/project_report.pdf) · 🎥 [Video presentation](https://www.youtube.com/watch?v=ZbqlASTRl54)
+
+---
+
+## About the agent
+
 Autonomous research agent for the **BirdCLEF 2026** competition (APA course project). An LLM **researcher** proposes experiments; a separate **coder** implements them; subprocesses train and evaluate models; results are stored in **experiment memory** and drive the next iteration. The pipeline searches cheaply on a data subset, picks a **CNN vs Perch** tournament winner, then runs full-data training and hardcoded pseudo-labelling for Kaggle submission.
 
 This repository is structured for **D1 (GitHub repository)** deliverables: source code, configuration, dependency file, experiment logs, and instructions so a reviewer can clone, install, start a local LLM, and run the agent with a short documented sequence.
